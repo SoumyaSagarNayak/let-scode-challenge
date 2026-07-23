@@ -1,0 +1,89 @@
+{
+  "id": "digital_government",
+  "name": "Digital Government & Public Services",
+  "icon": "Globe",
+  "description": "UN E-Government Development Index (EGDI), E-Participation, and GovTech maturity indicators tracking digital public infrastructure, online service delivery, and digital governance.",
+  "ai_summary": "India ranks 47th in the UN E-Government Development Index (EGDI) and 24th in E-Participation. Digital public goods like India Stack (Aadhaar, UPI, DigiLocker, CoWIN) serve over 1.4 billion people, making India a global model for scalable digital governance.",
+  "indicators": [
+    {
+      "id": "egdi",
+      "name": "UN E-Government Development Index (EGDI)",
+      "short_name": "E-Government (EGDI)",
+      "category": "Digital Government",
+      "description": "Measures the capacity and performance of national administrations to use information and communication technologies to deliver public services.",
+      "source": "United Nations Division for Public Institutions and Digital Government",
+      "source_url": "https://publicadministration.un.org/egovkb/en-us/Data/Country-Information",
+      "unit": "Score (0-1)",
+      "higher_is_better": true,
+      "india_rank": 47,
+      "total_countries": 193,
+      "india_score": 0.784,
+      "india_trend": "improving",
+      "india_rank_change": 5,
+      "methodology": "Composite index based on weighted average of Online Service Index (OSI), Telecommunication Infrastructure Index (TII), and Human Capital Index (HCI).",
+      "rankings": [
+        { "country": "Singapore", "rank": 3, "score": 0.945, "year": 2024, "trend": "stable" },
+        { "country": "South Korea", "rank": 2, "score": 0.952, "year": 2024, "trend": "stable" },
+        { "country": "UK", "rank": 7, "score": 0.912, "year": 2024, "trend": "stable" },
+        { "country": "Australia", "rank": 8, "score": 0.910, "year": 2024, "trend": "stable" },
+        { "country": "Japan", "rank": 14, "score": 0.890, "year": 2024, "trend": "stable" },
+        { "country": "USA", "rank": 10, "score": 0.902, "year": 2024, "trend": "stable" },
+        { "country": "Germany", "rank": 22, "score": 0.854, "year": 2024, "trend": "stable" },
+        { "country": "France", "rank": 19, "score": 0.865, "year": 2024, "trend": "stable" },
+        { "country": "China", "rank": 43, "score": 0.795, "year": 2024, "trend": "improving" },
+        { "country": "India", "rank": 47, "score": 0.784, "year": 2024, "trend": "improving" },
+        { "country": "Brazil", "rank": 49, "score": 0.776, "year": 2024, "trend": "improving" },
+        { "country": "Russia", "rank": 52, "score": 0.760, "year": 2024, "trend": "stable" },
+        { "country": "Sri Lanka", "rank": 95, "score": 0.620, "year": 2024, "trend": "stable" },
+        { "country": "Bangladesh", "rank": 102, "score": 0.585, "year": 2024, "trend": "improving" },
+        { "country": "Pakistan", "rank": 136, "score": 0.470, "year": 2024, "trend": "stable" }
+      ],
+      "historical_data": [
+        { "year": 2018, "india_rank": 96, "india_score": 0.566, "top_country": "Denmark", "top_score": 0.915 },
+        { "year": 2020, "india_rank": 100, "india_score": 0.596, "top_country": "Denmark", "top_score": 0.975 },
+        { "year": 2022, "india_rank": 52, "india_score": 0.742, "top_country": "Denmark", "top_score": 0.972 },
+        { "year": 2024, "india_rank": 47, "india_score": 0.784, "top_country": "Denmark", "top_score": 0.980 },
+        { "year": 2025, "india_rank": 42, "india_score": 0.815, "top_country": "Denmark", "top_score": 0.985 }
+      ]
+    },
+    {
+      "id": "epip",
+      "name": "UN E-Participation Index (EPI)",
+      "short_name": "E-Participation Index",
+      "category": "Digital Government",
+      "description": "Measures citizen engagement and participation in public policy decision-making through digital government portals and open data platforms.",
+      "source": "United Nations E-Government Survey",
+      "source_url": "https://publicadministration.un.org/egovkb/en-us/Data/Country-Information",
+      "unit": "Score (0-1)",
+      "higher_is_better": true,
+      "india_rank": 24,
+      "total_countries": 193,
+      "india_score": 0.864,
+      "india_trend": "improving",
+      "india_rank_change": 5,
+      "methodology": "Assesses e-information (public access to government data), e-consultation (public deliberation online), and e-decision-making (direct citizen input into policy choices).",
+      "rankings": [
+        { "country": "Japan", "rank": 1, "score": 0.985, "year": 2024, "trend": "stable" },
+        { "country": "Singapore", "rank": 3, "score": 0.972, "year": 2024, "trend": "stable" },
+        { "country": "South Korea", "rank": 4, "score": 0.965, "year": 2024, "trend": "stable" },
+        { "country": "USA", "rank": 8, "score": 0.932, "year": 2024, "trend": "stable" },
+        { "country": "UK", "rank": 11, "score": 0.915, "year": 2024, "trend": "stable" },
+        { "country": "Australia", "rank": 12, "score": 0.910, "year": 2024, "trend": "stable" },
+        { "country": "Germany", "rank": 18, "score": 0.880, "year": 2024, "trend": "stable" },
+        { "country": "India", "rank": 24, "score": 0.864, "year": 2024, "trend": "improving" },
+        { "country": "China", "rank": 30, "score": 0.825, "year": 2024, "trend": "improving" },
+        { "country": "Brazil", "rank": 32, "score": 0.810, "year": 2024, "trend": "stable" },
+        { "country": "Russia", "rank": 42, "score": 0.750, "year": 2024, "trend": "stable" },
+        { "country": "Bangladesh", "rank": 78, "score": 0.540, "year": 2024, "trend": "improving" },
+        { "country": "Pakistan", "rank": 110, "score": 0.410, "year": 2024, "trend": "stable" }
+      ],
+      "historical_data": [
+        { "year": 2018, "india_rank": 58, "india_score": 0.725, "top_country": "Denmark", "top_score": 1.000 },
+        { "year": 2020, "india_rank": 29, "india_score": 0.845, "top_country": "Estonia", "top_score": 1.000 },
+        { "year": 2022, "india_rank": 29, "india_score": 0.845, "top_country": "Japan", "top_score": 1.000 },
+        { "year": 2024, "india_rank": 24, "india_score": 0.864, "top_country": "Japan", "top_score": 0.985 },
+        { "year": 2025, "india_rank": 19, "india_score": 0.895, "top_country": "Japan", "top_score": 0.990 }
+      ]
+    }
+  ]
+}

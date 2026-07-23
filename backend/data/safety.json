@@ -1,0 +1,54 @@
+{
+  "id": "safety",
+  "name": "Safety & Peace",
+  "icon": "ShieldCheck",
+  "description": "Global peace, crime rates, disaster vulnerability, and road safety metrics from Institute for Economics & Peace, Numbeo, and INFORM Risk Index.",
+  "ai_summary": "India ranks 116th in the Global Peace Index (GPI score 2.319). Internal security stability and regional peacefulness have shown steady marginal improvements, while disaster response capability has matured significantly.",
+  "indicators": [
+    {
+      "id": "gpi",
+      "name": "Institute for Economics & Peace Global Peace Index",
+      "short_name": "Global Peace Index (GPI)",
+      "category": "Safety",
+      "description": "Measures the state of peace across 163 independent states evaluating societal safety, ongoing conflict, and militarization.",
+      "source": "Institute for Economics & Peace (IEP)",
+      "source_url": "https://www.visionofhumanity.org/maps/#/",
+      "unit": "Score (1-5)",
+      "higher_is_better": false,
+      "india_rank": 116,
+      "total_countries": 163,
+      "india_score": 2.319,
+      "india_trend": "improving",
+      "india_rank_change": 1,
+      "methodology": "23 quantitative and qualitative indicators measuring safety and security, ongoing domestic and international conflict, and militarization.",
+      "rankings": [
+        { "country": "Singapore", "rank": 5, "score": 1.339, "year": 2024, "trend": "stable" },
+        { "country": "Japan", "rank": 17, "score": 1.525, "year": 2024, "trend": "stable" },
+        { "country": "Germany", "rank": 20, "score": 1.542, "year": 2024, "trend": "stable" },
+        { "country": "Canada", "rank": 11, "score": 1.449, "year": 2024, "trend": "stable" },
+        { "country": "Australia", "rank": 19, "score": 1.536, "year": 2024, "trend": "stable" },
+        { "country": "UK", "rank": 34, "score": 1.703, "year": 2024, "trend": "stable" },
+        { "country": "South Korea", "rank": 46, "score": 1.848, "year": 2024, "trend": "stable" },
+        { "country": "France", "rank": 67, "score": 1.988, "year": 2024, "trend": "stable" },
+        { "country": "China", "rank": 89, "score": 2.101, "year": 2024, "trend": "stable" },
+        { "country": "Sri Lanka", "rank": 100, "score": 2.195, "year": 2024, "trend": "improving" },
+        { "country": "India", "rank": 116, "score": 2.319, "year": 2024, "trend": "improving" },
+        { "country": "USA", "rank": 131, "score": 2.448, "year": 2024, "trend": "declining" },
+        { "country": "Bangladesh", "rank": 93, "score": 2.126, "year": 2024, "trend": "stable" },
+        { "country": "Brazil", "rank": 132, "score": 2.458, "year": 2024, "trend": "stable" },
+        { "country": "Pakistan", "rank": 146, "score": 2.783, "year": 2024, "trend": "declining" },
+        { "country": "Russia", "rank": 157, "score": 3.249, "year": 2024, "trend": "declining" }
+      ],
+      "historical_data": [
+        { "year": 2018, "india_rank": 136, "india_score": 2.504, "top_country": "Iceland", "top_score": 1.096 },
+        { "year": 2019, "india_rank": 141, "india_score": 2.538, "top_country": "Iceland", "top_score": 1.072 },
+        { "year": 2020, "india_rank": 139, "india_score": 2.516, "top_country": "Iceland", "top_score": 1.078 },
+        { "year": 2021, "india_rank": 135, "india_score": 2.553, "top_country": "Iceland", "top_score": 1.100 },
+        { "year": 2022, "india_rank": 135, "india_score": 2.578, "top_country": "Iceland", "top_score": 1.107 },
+        { "year": 2023, "india_rank": 126, "india_score": 2.314, "top_country": "Iceland", "top_score": 1.124 },
+        { "year": 2024, "india_rank": 116, "india_score": 2.319, "top_country": "Iceland", "top_score": 1.112 },
+        { "year": 2025, "india_rank": 110, "india_score": 2.280, "top_country": "Iceland", "top_score": 1.100 }
+      ]
+    }
+  ]
+}
