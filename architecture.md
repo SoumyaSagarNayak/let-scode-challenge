@@ -169,11 +169,11 @@ India's trajectory is contextualized against **15 benchmark nations** selected a
 
 ```mermaid
 graph LR
-    subgraph Target Nation
+    subgraph Target_Nation
         IN["🇮🇳 India (IN) - South Asia"]
     end
 
-    subgraph Developed Benchmarks ["Developed Economies"]
+    subgraph Developed_Benchmarks["Developed Economies"]
         US["🇺🇸 USA (US)"]
         JP["🇯🇵 Japan (JP)"]
         DE["🇩🇪 Germany (DE)"]
@@ -185,7 +185,7 @@ graph LR
         KR["🇰🇷 South Korea (KR)"]
     end
 
-    subgraph Emerging & Peer Benchmarks ["Emerging / Regional Peers"]
+    subgraph Emerging_Peers["Emerging / Regional Peers"]
         CN["🇨🇳 China (CN)"]
         BR["🇧🇷 Brazil (BR)"]
         RU["🇷🇺 Russia (RU)"]
@@ -194,10 +194,23 @@ graph LR
         LK["🇱🇰 Sri Lanka (LK)"]
     end
 
-    IN <--> Developed Benchmarks
-    IN <--> Emerging & Peer Benchmarks
-```
+    IN <--> US
+    IN <--> JP
+    IN <--> DE
+    IN <--> GB
+    IN <--> FR
+    IN <--> CA
+    IN <--> AU
+    IN <--> SG
+    IN <--> KR
 
+    IN <--> CN
+    IN <--> BR
+    IN <--> RU
+    IN <--> BD
+    IN <--> PK
+    IN <--> LK
+```
 ### 3.3 Dataset Data Model Schema
 
 Every pillar dataset file (`backend/data/<category>.json`) adheres to the following structured JSON schema:
