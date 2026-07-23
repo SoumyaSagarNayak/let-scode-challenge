@@ -7,7 +7,7 @@ import SkeletonLoader from '../components/SkeletonLoader';
 import { fetchCategoryById } from '../services/api';
 import { formatRank, formatNumber } from '../utils/formatters';
 
-export default function CategoryDetailPage({ onExplainAi }) {
+export default function CategoryDetailPage({ onExplainAi, onSelectIndicator }) {
   const { id } = useParams();
   const [category, setCategory] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -84,7 +84,13 @@ export default function CategoryDetailPage({ onExplainAi }) {
         <h2 className="display-sm" style={{ marginBottom: '24px' }}>Category Indicators</h2>
         <div className="grid-3">
           {category.indicators && category.indicators.map(ind => (
-            <IndicatorCard key={ind.id} indicator={ind} categoryId={category.id} onExplainAi={onExplainAi} />
+            <IndicatorCard
+              key={ind.id}
+              indicator={ind}
+              categoryId={category.id}
+              onExplainAi={onExplainAi}
+              onSelectIndicator={onSelectIndicator}
+            />
           ))}
         </div>
       </div>

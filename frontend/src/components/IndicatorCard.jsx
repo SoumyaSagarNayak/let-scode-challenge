@@ -1,38 +1,86 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Bookmark, ExternalLink } from 'lucide-react';
-import { formatRank, formatNumber } from '../utils/formatters';
+import { ArrowUpRight, Bookmark, ExternalLink, Users, Eye } from 'lucide-react';
+import { formatRank, formatNumber, formatTrendDelta } from '../utils/formatters';
 import { useBookmarks } from '../hooks/useBookmarks';
 
-export default function IndicatorCard({ indicator, categoryId, onExplainAi }) {
+export default function IndicatorCard({ indicator, categoryId, onExplainAi, onSelectIndicator }) {
   const { isBookmarked, toggleBookmark } = useBookmarks();
   const bookmarked = isBookmarked(indicator.id);
+  const trendInfo = formatTrendDelta(indicator.india_rank_change, indicator.india_trend);
+
+  // Peer rank calculation fallback if not passed directly
+  let peerRank = indicator.peer_rank;
+  let peerTotal = indicator.peer_total || (indicator.rankings ? indicator.rankings.length : 16);
+  if (!peerRank && indicator.rankings && Array.isArray(indicator.rankings)) {
+    const sorted = [...indicator.rankings].sort((a, b) => a.rank - b.rank);
+    const idx = sorted.findIndex(r => r.country && r.country.toLowerCase() === 'india');
+    if (idx !== -1) peerRank = idx + 1;
+  }
+
+  const handleCardClick = (e) => {
+    // Don't trigger modal if user clicked directly on interactive elements like bookmark button or source link
+    if (e.target.closest('button') || e.target.closest('a')) return;
+    if (onSelectIndicator) {
+      onSelectIndicator(indicator);
+    }
+  };
 
   return (
-    <div style={{
-      backgroundColor: 'var(--color-canvas)',
-      border: '1px solid var(--color-hairline)',
-      borderRadius: 'var(--radius-lg)',
-      padding: '24px',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      transition: 'transform 0.2s ease, border-color 0.2s ease',
-      boxShadow: '0 4px 16px rgba(0, 0, 0, 0.02)'
-    }} className="indicator-card-hover">
+    <div
+      onClick={handleCardClick}
+      style={{
+        backgroundColor: 'var(--color-canvas)',
+        border: '1px solid var(--color-hairline)',
+        borderRadius: 'var(--radius-lg)',
+        padding: '24px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        transition: 'all 0.2s ease',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.02)',
+        cursor: onSelectIndicator ? 'pointer' : 'default',
+        position: 'relative'
+      }}
+      className="indicator-card-hover"
+    >
       {/* Top Header */}
       <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-          <span className="caption-uppercase" style={{ color: 'var(--color-muted)' }}>
-            {indicator.category || 'Global Indicator'}
-          </span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+            <span className="caption-uppercase" style={{ color: 'var(--color-muted)' }}>
+              {indicator.category || 'Global Indicator'}
+            </span>
+            {peerRank && (
+              <span style={{
+                fontSize: '10px',
+                fontWeight: '700',
+                backgroundColor: 'rgba(13, 148, 136, 0.1)',
+                color: 'var(--color-brand-teal)',
+                padding: '2px 6px',
+                borderRadius: 'var(--radius-xs)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '3px'
+              }}>
+                <Users size={10} />
+                <span>{peerRank}/{peerTotal} Peers</span>
+              </span>
+            )}
+          </div>
+
           <button
-            onClick={() => toggleBookmark(indicator)}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleBookmark(indicator);
+            }}
             title={bookmarked ? "Remove bookmark" : "Bookmark indicator"}
             style={{
               color: bookmarked ? 'var(--color-brand-pink)' : 'var(--color-muted)',
               cursor: 'pointer',
-              padding: '4px'
+              padding: '4px',
+              border: 'none',
+              background: 'none'
             }}
           >
             <Bookmark size={18} fill={bookmarked ? 'var(--color-brand-pink)' : 'none'} />
@@ -54,13 +102,14 @@ export default function IndicatorCard({ indicator, categoryId, onExplainAi }) {
           {indicator.description}
         </p>
 
-        {/* Source Attribution Badge Link */}
-        {indicator.source && (
-          <div style={{ marginBottom: '16px' }}>
+        {/* Source Attribution Badge Link & Micro Trend */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
+          {indicator.source ? (
             <a
-              href={indicator.source_url}
+              href={indicator.source_url || '#'}
               target="_blank"
               rel="noreferrer"
+              onClick={(e) => e.stopPropagation()}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -71,14 +120,30 @@ export default function IndicatorCard({ indicator, categoryId, onExplainAi }) {
                 padding: '2px 8px',
                 borderRadius: 'var(--radius-xs)',
                 fontWeight: '600',
-                border: '1px solid var(--color-hairline)'
+                border: '1px solid var(--color-hairline)',
+                textDecoration: 'none'
               }}
             >
               <span>Source: {indicator.source}</span>
               <ExternalLink size={10} />
             </a>
-          </div>
-        )}
+          ) : <div />}
+
+          {/* Micro Trend Badge */}
+          <span style={{
+            fontSize: '11px',
+            fontWeight: '700',
+            padding: '2px 8px',
+            borderRadius: 'var(--radius-xs)',
+            backgroundColor: trendInfo.type === 'positive' ? 'rgba(34, 197, 94, 0.1)' : trendInfo.type === 'negative' ? 'rgba(239, 68, 68, 0.1)' : 'var(--color-surface-soft)',
+            color: trendInfo.type === 'positive' ? 'var(--color-success)' : trendInfo.type === 'negative' ? 'var(--color-error)' : 'var(--color-muted)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '3px'
+          }}>
+            {trendInfo.label}
+          </span>
+        </div>
       </div>
 
       {/* Center Rank & Score metrics */}
@@ -96,7 +161,7 @@ export default function IndicatorCard({ indicator, categoryId, onExplainAi }) {
           <span style={{ fontSize: '20px', fontWeight: '700', color: 'var(--color-ink)' }}>
             {formatRank(indicator.india_rank)}
             <span style={{ fontSize: '12px', fontWeight: '400', color: 'var(--color-muted)', marginLeft: '4px' }}>
-              / {indicator.total_countries}
+              / {indicator.total_countries || 195}
             </span>
           </span>
         </div>
@@ -112,15 +177,24 @@ export default function IndicatorCard({ indicator, categoryId, onExplainAi }) {
       {/* Footer CTA & Action Buttons */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
         <button
-          onClick={() => onExplainAi && onExplainAi(indicator)}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (onSelectIndicator) {
+              onSelectIndicator(indicator);
+            } else if (onExplainAi) {
+              onExplainAi(indicator);
+            }
+          }}
           className="btn-secondary"
-          style={{ height: '36px', padding: '6px 12px', fontSize: '12px' }}
+          style={{ height: '36px', padding: '6px 12px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
         >
-          ✨ Explain AI
+          <Eye size={13} />
+          <span>Quick Preview</span>
         </button>
 
         <Link
           to={`/indicator/${indicator.id}`}
+          onClick={(e) => e.stopPropagation()}
           className="btn-primary"
           style={{ height: '36px', padding: '6px 12px', fontSize: '12px' }}
         >

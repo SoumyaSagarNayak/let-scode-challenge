@@ -36,3 +36,17 @@ export function getCategoryCardBg(index) {
   ];
   return bgClasses[index % bgClasses.length];
 }
+
+export function formatTrendDelta(rankChange, trend) {
+  if (rankChange !== undefined && rankChange !== null && rankChange !== 0) {
+    if (rankChange > 0) {
+      return { label: `▲ +${rankChange}`, type: 'positive' };
+    } else {
+      return { label: `▼ ${rankChange}`, type: 'negative' };
+    }
+  }
+  if (trend === 'improving') return { label: '▲ Improving', type: 'positive' };
+  if (trend === 'declining') return { label: '▼ Declining', type: 'negative' };
+  return { label: '● Flat', type: 'neutral' };
+}
+

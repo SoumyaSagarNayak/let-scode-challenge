@@ -16,12 +16,30 @@ const CATEGORY_FILES = [
   'digital_government.json'
 ];
 
+// Helper to calculate peer rank standing among tracked benchmark nations
+function attachPeerMetrics(ind) {
+  if (!ind || !ind.rankings || !Array.isArray(ind.rankings)) return ind;
+  const sorted = [...ind.rankings].sort((a, b) => a.rank - b.rank);
+  const indiaIdx = sorted.findIndex(r => r.country.toLowerCase() === 'india');
+  const peer_rank = indiaIdx !== -1 ? indiaIdx + 1 : ind.india_rank;
+  const peer_total = sorted.length;
+  return {
+    ...ind,
+    peer_rank,
+    peer_total
+  };
+}
+
 // Helper to read and parse a JSON file safely
 function readJsonFile(filename) {
   try {
     const filePath = path.join(DATA_DIR, filename);
     const rawData = fs.readFileSync(filePath, 'utf8');
-    return JSON.parse(rawData);
+    const parsed = JSON.parse(rawData);
+    if (parsed && parsed.indicators && Array.isArray(parsed.indicators)) {
+      parsed.indicators = parsed.indicators.map(attachPeerMetrics);
+    }
+    return parsed;
   } catch (error) {
     console.error(`Error reading ${filename}:`, error);
     return null;
@@ -59,12 +77,18 @@ function getDashboardSummary() {
           category: cat.name,
           categoryId: cat.id,
           india_rank: ind.india_rank,
+          peer_rank: ind.peer_rank,
+          peer_total: ind.peer_total,
           total_countries: ind.total_countries,
           india_score: ind.india_score,
           unit: ind.unit,
           india_trend: ind.india_trend,
           india_rank_change: ind.india_rank_change,
-          source: ind.source
+          source: ind.source,
+          source_url: ind.source_url,
+          description: ind.description,
+          rankings: ind.rankings,
+          historical_data: ind.historical_data
         });
       }
     });
