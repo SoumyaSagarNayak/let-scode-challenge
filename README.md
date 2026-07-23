@@ -20,6 +20,45 @@
 
 ---
 
+## 🛠️ Technologies Used & Purpose
+
+### 🌐 Frontend Framework & Routing
+- **[React 18](https://react.dev/)** (`react`, `react-dom` `v18.3.1`): Component-based JavaScript library powering the single-page application (SPA), interactive components, and UI state management.
+- **[Vite](https://vitejs.dev/)** (`vite` `v5.2.11`, `@vitejs/plugin-react`): Lightning-fast build tool and development server providing Hot Module Replacement (HMR) for instant feedback during development.
+- **[React Router DOM](https://reactrouter.com/)** (`react-router-dom` `v6.23.1`): Declarative client-side router managing application navigation across 10 distinct routes without page reloads.
+
+### 📊 Data Visualization & Mapping
+- **[Recharts](https://recharts.org/)** (`recharts` `v2.12.7`): Reusable React charting library used to generate interactive Radar, Bar, Area, and Line charts for side-by-side country comparison and 2018–2025 historical trajectory analysis.
+- **[React Simple Maps](https://www.react-simple-maps.io/)** (`react-simple-maps` `v3.0.0`): SVG map visualization wrapper for rendering the interactive world map choropleth.
+- **[TopoJSON Client](https://github.com/topojson/topojson-client)** (`topojson-client` `v3.1.0`): Utility to decode TopoJSON geographical structures into GeoJSON geometries rendered on the world map.
+- **[D3 Scale](https://d3js.org/d3-scale)** (`d3-scale` `v4.0.2`): Mathematical color interpolation scales (`scaleSequential`, `scaleQuantize`) mapping indicator scores to dynamic map choropleth colors.
+
+### 🎨 Design System & UI Styling
+- **Vanilla CSS (Clay UI System)**: Modern custom CSS framework built with CSS custom properties (variables), modern typography (Inter/Outfit), glassmorphism, responsive Grid/Flexbox layouts, and custom micro-animations.
+- **[Lucide React](https://lucide.dev/)** (`lucide-react` `v0.380.0`): Icon library supplying consistent SVG icons for UI controls, navigation, search, and metric indicator cards.
+
+### 🔐 User Authentication
+- **[Clerk React](https://clerk.com/)** (`@clerk/clerk-react` `v5.0.0`): Authentication platform integration for user sign-in, sign-up, and session state management.
+
+### ⚡ Backend REST API & Server
+- **[Node.js](https://nodejs.org/)**: Asynchronous server-side JavaScript runtime environment.
+- **[Express.js](https://expressjs.com/)** (`express` `v4.19.2`): Web framework serving RESTful API routes (`/api/*`) for data aggregation, country metrics, comparison engine, and search queries.
+- **[CORS](https://github.com/expressjs/cors)** (`cors` `v2.8.5`): Express middleware allowing cross-origin requests between the Vite frontend and Node backend.
+- **[Dotenv](https://github.com/motdotla/dotenv)** (`dotenv` `v16.4.5`): Environment variable manager for handling sensitive configs and environment settings.
+
+### 🤖 Artificial Intelligence Integration
+- **OpenAI API / Custom Fallback Engine**: AI integration producing executive policy summaries under 150 words. Uses OpenAI API when credentials exist, with an intelligent fallback rule engine for offline operation.
+
+### 💾 Data Storage & State Persistence
+- **JSON Datasets** (`backend/data/*.json`): Structured local static dataset files storing scores, rankings, and historical data (2018–2025) for 16 benchmark nations across 10 global pillars.
+- **Browser LocalStorage**: Web Storage API storing user bookmarks, saved indicator metrics, and dark/light UI color theme preferences locally in the browser.
+
+### ☁️ Cloud Infrastructure & Deployment
+- **[Vercel](https://vercel.com/)**: Cloud platform providing hosting for frontend static builds (`frontend/dist`) and serverless execution for backend routes via `api/index.js`.
+- **Vercel Serverless Functions**: Serverless gateway running Express REST API handlers without requiring dedicated server infrastructure.
+
+---
+
 ## 🏛️ System Architecture & Documentation
 
 For detailed system design, data architecture schemas, API specifications, and interactive UML Mermaid diagrams, see the dedicated architecture documentation:
