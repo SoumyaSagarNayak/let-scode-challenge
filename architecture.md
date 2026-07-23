@@ -32,10 +32,12 @@ The **India Global Scorecard** is a production-quality development intelligence 
 
 ### Core System Goals
 1. **Pillar Scorekeeping**: Monitor 10 core developmental pillars spanning Economy, Governance, Healthcare, Technology, Environment, and Social Development.
-2. **Cross-Country Benchmarking**: Enable bilateral comparison of India with 15+ benchmark nations using Recharts Radar & Bar visualizations.
-3. **Policy Insight Generation**: Provide AI-assisted executive summaries evaluating India's competitive strengths, vulnerabilities, and reform opportunities.
-4. **Zero-Latency Data Access**: Serve optimized static datasets with server-side aggregation and instant fuzzy search capabilities.
-5. **Serverless Portability**: Run seamlessly in standalone Express environments or as zero-configuration Vercel Serverless Functions.
+2. **Peer Group Benchmarking**: Calculate relative standing (`X / 16 Peers`) comparing India against 16 benchmark economies (G20 + key regional neighbors).
+3. **Cross-Country Bilateral Benchmarking**: Enable side-by-side comparison of India with benchmark nations using Recharts Radar & Bar visualizations.
+4. **Consolidated Quick Detail Preview**: Provide interactive indicator preview modals (`IndicatorDetailModal.jsx`) embedded with mini 5-year trend line area charts, side-by-side peer snapshot table, direct publisher verification links, and AI strategic insight buttons.
+5. **Policy Insight Generation**: Provide AI-assisted executive summaries evaluating India's competitive strengths, vulnerabilities, and reform opportunities.
+6. **Zero-Latency Client Filtering**: Serve optimized static datasets with server-side aggregation and instant fuzzy search / category pill filter capabilities.
+7. **Serverless Portability**: Run seamlessly in standalone Express environments or as zero-configuration Vercel Serverless Functions.
 
 ---
 
@@ -51,6 +53,7 @@ graph TD
         Recharts["Recharts Analytics Engine"]
         Maps["React Simple Maps (GeoJSON)"]
         State["Hooks (useBookmarks, useTheme)"]
+        Modals["Modals (SearchModal, AiInsightModal, IndicatorDetailModal)"]
     end
 
     subgraph API Gateway ["🌐 API & Serverless Tier"]
@@ -73,7 +76,7 @@ graph TD
 
     UI --> Router
     Router --> Recharts & Maps
-    UI --> State
+    UI --> State & Modals
     UI -- "HTTP GET / POST via Fetch API" --> VercelRewrite
     VercelRewrite --> ExpressApp
     ExpressApp --> ApiRoutes
@@ -99,19 +102,19 @@ sequenceDiagram
     participant HELPER as Data Helper Engine
     participant FS as Local JSON Filesystem
 
-    User->>FE: Navigate to /dashboard or /compare
-    FE->>GW: GET /api/dashboard or GET /api/compare?country=USA
+    User->>FE: Navigate to /dashboard or /categories
+    FE->>GW: GET /api/dashboard or GET /api/categories
     GW->>API: Route to /api/dashboard
-    API->>CTRL: Call getDashboard() / compareCountry()
+    API->>CTRL: Call getDashboard() / getCategories()
     CTRL->>HELPER: Request getDashboardSummary()
     HELPER->>FS: Read & parse 10 category JSON datasets
     FS-->>HELPER: Return Raw Category Datasets
-    HELPER->>HELPER: Calculate overall rank average, highlights & normalized scores
+    HELPER->>HELPER: Compute peer ranks (attachPeerMetrics), rank average, & highlights
     HELPER-->>CTRL: Return aggregated JSON payload
     CTRL-->>API: 200 OK (success: true, data: {...})
     API-->>GW: HTTP JSON Response
     GW-->>FE: HTTP JSON Response
-    FE-->>User: Render Dashboard Cards & Recharts Radar/Bar Charts
+    FE-->>User: Render Dashboard Cards, Micro-Trends, & Recharts Analytics
 ```
 
 #### B. AI Insight Generation & Intelligent Fallback Sequence
@@ -165,7 +168,7 @@ The application aggregates metrics across **10 distinct developmental pillars**.
 
 ### 3.2 Benchmark Nations
 
-India's trajectory is contextualized against **15 benchmark nations** selected across global economic categories:
+India's trajectory is contextualized against **16 benchmark nations** selected across global economic categories:
 
 ```mermaid
 graph LR
@@ -211,6 +214,7 @@ graph LR
     IN <--> PK
     IN <--> LK
 ```
+
 ### 3.3 Dataset Data Model Schema
 
 Every pillar dataset file (`backend/data/<category>.json`) adheres to the following structured JSON schema:
@@ -235,6 +239,8 @@ erDiagram
         string short_name
         string description
         int india_rank
+        int peer_rank
+        int peer_total
         float india_score
         int total_countries
         string unit
@@ -242,6 +248,7 @@ erDiagram
         string india_trend
         int india_rank_change
         string source
+        string source_url
     }
 
     RANKING_ENTRY {
@@ -269,15 +276,17 @@ The React frontend uses **React Router v6** for single-page dynamic routing pair
 ```mermaid
 graph TD
     App["App.jsx (Root Layout Shell)"]
-    Nav["Navbar.jsx (Brand, Links, Theme Toggle, Search Button)"]
+    Nav["Navbar.jsx (Brand, Links, Theme Toggle, Search Launcher)"]
     Foot["Footer.jsx (Global Navigation, Credits, Quick Links)"]
     SearchM["SearchModal.jsx (Cmd+K Global Instant Search)"]
     AiM["AiInsightModal.jsx (AI Summary Generator Dialog)"]
+    DetailM["IndicatorDetailModal.jsx (Consolidated Quick Preview Modal)"]
 
     App --> Nav
     App --> Foot
     App --> SearchM
     App --> AiM
+    App --> DetailM
 
     App --> Routes["Routes Switch"]
 
@@ -336,9 +345,18 @@ In `backend/utils/dataHelper.js`, radar chart scores for bilateral country compa
 
 $$\text{NormalizedScore} = \max\left(10, \text{round}\left(100 - \text{avgRank} \times 0.7\right)\right)$$
 
-- High global ranks (e.g., Rank 1 to 5) yield normalized performance scores between 96 and 100.
-- Moderate global ranks (e.g., Rank 40 to 60) yield scores between 58 and 72.
-- Lower ranks are bounded at a minimum baseline of 10 to ensure clean radar chart visualization without scale distortion.
+#### Peer Rank Calculation Algorithm
+Every indicator dynamically computes India's relative peer standing among 16 benchmark economies:
+```javascript
+function attachPeerMetrics(ind) {
+  if (!ind || !ind.rankings || !Array.isArray(ind.rankings)) return ind;
+  const sorted = [...ind.rankings].sort((a, b) => a.rank - b.rank);
+  const indiaIdx = sorted.findIndex(r => r.country.toLowerCase() === 'india');
+  const peer_rank = indiaIdx !== -1 ? indiaIdx + 1 : ind.india_rank;
+  const peer_total = sorted.length;
+  return { ...ind, peer_rank, peer_total };
+}
+```
 
 ### 5.3 AI Insight Generator & Fallback Pipeline
 
@@ -392,6 +410,7 @@ Let'scodedev-challenge/
 ├── architecture.md             # Complete system design & architecture manual (This File)
 ├── DEPLOYMENT.md               # Step-by-step production deployment guide
 ├── design.md                   # Detailed frontend design specification & UI system tokens
+├── PRESENTATION_SCRIPT.txt     # Presentation & Live Demo script (5-7 mins)
 ├── README.md                   # Project overview & developer quickstart guide
 ├── package.json                # Monorepo top-level script configurations
 ├── vercel.json                 # Monorepo deployment & rewrite specification
@@ -405,7 +424,7 @@ Let'scodedev-challenge/
 │   │   └── scorecardController.js # REST handlers for scorecards, comparison, and search
 │   ├── data/                   # 10 Multilateral JSON Datasets
 │   │   ├── digital_government.json
-│   │   ├── economy.json
+   │   ├── economy.json
 │   │   ├── education.json
 │   │   ├── environment.json
 │   │   ├── equality.json
@@ -417,7 +436,7 @@ Let'scodedev-challenge/
 │   ├── routes/                 # Express API Endpoint Definitions
 │   │   └── api.js              # Router declaring /api/* endpoints
 │   ├── utils/                  # Core Business & Aggregation Helpers
-│   │   └── dataHelper.js       # Data loader, rank averager, radar calculator, fuzzy search
+│   │   └── dataHelper.js       # Data loader, rank averager, peer rank calculator, fuzzy search
 │   ├── .env                    # Environment variables (OPENAI_API_KEY, PORT)
 │   ├── package.json            # Backend Node.js dependencies
 │   └── server.js               # Express standalone server entry point
@@ -431,11 +450,12 @@ Let'scodedev-challenge/
     │   │   ├── ComparisonRadarChart.jsx    # Recharts radar chart for 10-pillar comparison
     │   │   ├── Footer.jsx                  # Footer layout with credits & links
     │   │   ├── IndiaGlobeIllustration.jsx  # SVG vector illustration element
-    │   │   ├── IndicatorCard.jsx           # Individual indicator scorecard card
+    │   │   ├── IndicatorCard.jsx           # Indicator card with peer badges & micro-trends
+    │   │   ├── IndicatorDetailModal.jsx    # Quick preview modal with trend line & peer table
     │   │   ├── Navbar.jsx                  # Header navigation, search launcher & theme toggle
     │   │   ├── SearchModal.jsx             # Cmd+K fuzzy search modal overlay
     │   │   ├── SkeletonLoader.jsx          # UI loading placeholder component
-    │   │   ├── StatCard.jsx                # Key performance metric card
+    │   │   ├── StatCard.jsx                # Key performance metric card with peer badges
     │   │   ├── TrendLineChart.jsx          # Recharts historical trend line & area chart
     │   │   └── WorldMap.jsx                # React Simple Maps interactive choropleth map
     │   ├── hooks/              # Reusable React Custom Hooks
@@ -446,9 +466,9 @@ Let'scodedev-challenge/
     │   │   ├── AnnualReportCardPage.jsx    # Complete executive scorecard report page
     │   │   ├── BookmarksPage.jsx           # Saved user indicators view
     │   │   ├── CategoryDetailPage.jsx      # Single pillar detailed view
-    │   │   ├── CategoryExplorerPage.jsx    # All 10 pillars overview grid
+    │   │   ├── CategoryExplorerPage.jsx    # All 10 pillars overview & real-time search
     │   │   ├── CountryComparisonPage.jsx   # Bilateral country comparison view
-    │   │   ├── DashboardPage.jsx           # Main executive scorekeeping dashboard
+    │   │   ├── DashboardPage.jsx           # Main executive scorekeeping & digest dashboard
     │   │   ├── HistoricalTrendsPage.jsx    # Multi-year trajectory analytics view
     │   │   ├── IndicatorReportPage.jsx     # Deep dive single indicator report page
     │   │   ├── LandingPage.jsx             # Platform landing page & hero section
@@ -459,7 +479,7 @@ Let'scodedev-challenge/
     │   ├── utils/              # Client Utilities & Helpers
     │   │   ├── constants.js            # App configuration constants
     │   │   ├── exportUtils.js          # CSV & JSON data export helpers
-    │   │   └── formatters.js           # Number & rank display formatters
+    │   │   └── formatters.js           # Number, rank & micro-trend formatters
     │   ├── App.jsx             # Main Router layout wrapper & modal state
     │   ├── index.css           # Clay UI design tokens, reset & CSS utilities
     │   └── main.jsx            # Vite DOM mount entry point

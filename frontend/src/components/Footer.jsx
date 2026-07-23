@@ -153,9 +153,17 @@ export default function Footer() {
             width: '100%',
             marginTop: '16px'
           }} className="body-sm">
-            <span style={{ color: 'var(--color-muted)' }}>
-              © {new Date().getFullYear()} India Global Scorecard. Public Development Intelligence Platform.
-            </span>
+            <a
+              href="https://github.com/SoumyaSagarNayak/let-scode-challenge"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: "var(--color-muted)",
+                textDecoration: "none",
+              }}
+            >
+              GitHub Repository
+            </a>
             <span style={{ color: 'var(--color-muted)' }}>
               Built with React, Recharts, Express & Vercel
             </span>
